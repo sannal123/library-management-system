@@ -5,6 +5,7 @@ import com.sannal.librarymanagement.entity.Book;
 import com.sannal.librarymanagement.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/books")
@@ -44,5 +45,11 @@ public class BookController {
     public String deleteBook(@PathVariable Long id){
         bookService.deleteBook(id);
         return "redirect:/books/list";
+    }
+
+    @GetMapping("/search")
+    public String searchBooks(@RequestParam String keyword, Model model){
+        model.addAttribute("books", bookService.searchBooks(keyword));
+        return  "book-list";
     }
 }

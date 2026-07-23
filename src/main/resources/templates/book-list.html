@@ -16,6 +16,30 @@
         + Add Book
     </a>
 
+    <form th:action="@{/books/search}" method="get" class="row g-3 mb-3">
+
+        <div class="col-md-6">
+            <input
+                    type="text"
+                    name="keyword"
+                    class="form-control"
+                    placeholder="Search by title">
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary">
+                Search
+            </button>
+        </div>
+
+        <div class="col-md-2">
+            <a href="/books/list" class="btn btn-secondary">
+                Reset
+            </a>
+        </div>
+
+    </form>
+
     <table class="table table-bordered table-hover">
 
         <thead class="table-dark">

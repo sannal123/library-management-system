@@ -26,4 +26,13 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
+    public List<Book> searchBooks(String keyword){
+        return bookRepository
+                .findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(
+                        keyword,
+                        keyword
+                );
+    }
+
+
 }
