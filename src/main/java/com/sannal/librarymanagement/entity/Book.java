@@ -27,6 +27,8 @@ public class Book {
 
     private String category;
 
+    private double price;
+
     private Integer quantity;
 
     private boolean available;

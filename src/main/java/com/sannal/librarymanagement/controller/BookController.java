@@ -4,10 +4,7 @@ import org.springframework.ui.Model;
 import com.sannal.librarymanagement.entity.Book;
 import com.sannal.librarymanagement.service.BookService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/books")
@@ -25,6 +22,7 @@ public class BookController {
 
     @PostMapping("/save")
     public  String saveBook(@ModelAttribute Book book){
+        book.setAvailable(true);
         bookService.saveBook(book);
         return "redirect:/books/list";
     }
@@ -33,6 +31,18 @@ public class BookController {
     public String listBook(Model model){
         model.addAttribute("books",bookService.getAllBooks());
         return "book-list";
+    }
 
+    @GetMapping("/edit/{id}")
+    public String editBook(@PathVariable Long id, Model model){
+        Book book = bookService.getBookById(id);
+        model.addAttribute("book", book);
+        return "book-form";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteBook(@PathVariable Long id){
+        bookService.deleteBook(id);
+        return "redirect:/books/list";
     }
 }
