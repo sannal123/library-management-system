@@ -1,9 +1,11 @@
 package com.sannal.librarymanagement.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.ui.Model;
 import com.sannal.librarymanagement.entity.Book;
 import com.sannal.librarymanagement.service.BookService;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,6 +17,8 @@ public class BookController {
     public BookController(BookService bookService){
         this.bookService=bookService;
     }
+
+
     @GetMapping("/new")
     public  String showBookFrom(Model model){
         model.addAttribute("book", new Book());
@@ -22,9 +26,16 @@ public class BookController {
     }
 
     @PostMapping("/save")
-    public  String saveBook(@ModelAttribute Book book){
+    public String saveBook(@Valid @ModelAttribute("book") Book book,
+                           BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "book-form";
+        }
+
         book.setAvailable(true);
         bookService.saveBook(book);
+
         return "redirect:/books/list";
     }
 

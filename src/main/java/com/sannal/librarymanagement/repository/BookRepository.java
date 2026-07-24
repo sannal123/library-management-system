@@ -13,4 +13,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             String title,
             String author
     );
+    long countByAvailable(boolean available);
 }

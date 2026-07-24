@@ -33,6 +33,13 @@ public class BookService {
                         keyword
                 );
     }
-
-
+    public long getTotalBooks(){
+        return  bookRepository.count();
+    }
+    public  long getAvailableBooks(){
+        return bookRepository.countByAvailable(true);
+    }
+    public long getUnAvailableBooks(){
+        return bookRepository.countByAvailable(false);
+    }
 }
