@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Page;
 
 @Controller
 @RequestMapping("/books")
@@ -47,11 +48,39 @@ public class BookController {
     }
 
     @GetMapping("/list")
-    public String listBook(Model model){
-        model.addAttribute("books",bookService.getAllBooks());
-        return "book-list";
-    }
+    public String listBook(
 
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "title") String sortField,
+
+            @RequestParam(defaultValue = "asc") String sortDir,
+
+            Model model){
+
+        int pageSize = 5;
+
+        Page<Book> bookPage =
+                bookService.getBooks(page,pageSize,sortField,sortDir);
+
+        model.addAttribute("books", bookPage.getContent());
+
+        model.addAttribute("currentPage", page);
+
+        model.addAttribute("totalPages", bookPage.getTotalPages());
+
+        model.addAttribute("totalItems", bookPage.getTotalElements());
+
+        model.addAttribute("sortField", sortField);
+
+        model.addAttribute("sortDir", sortDir);
+
+        model.addAttribute("reverseSortDir",
+                sortDir.equals("asc") ? "desc" : "asc");
+
+        return "book-list";
+
+    }
     @GetMapping("/edit/{id}")
     public String editBook(@PathVariable Long id, Model model){
         Book book = bookService.getBookById(id);
