@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/books")
@@ -27,14 +28,20 @@ public class BookController {
 
     @PostMapping("/save")
     public String saveBook(@Valid @ModelAttribute("book") Book book,
-                           BindingResult result) {
+                           BindingResult result,
+                           RedirectAttributes redirectAttributes) {
 
-        if (result.hasErrors()) {
+        if(result.hasErrors()){
             return "book-form";
         }
 
         book.setAvailable(true);
         bookService.saveBook(book);
+
+        redirectAttributes.addFlashAttribute(
+                "success",
+                "Book saved successfully!"
+        );
 
         return "redirect:/books/list";
     }
@@ -53,8 +60,16 @@ public class BookController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteBook(@PathVariable Long id){
+    public String deleteBook(@PathVariable Long id,
+                             RedirectAttributes redirectAttributes){
+
         bookService.deleteBook(id);
+
+        redirectAttributes.addFlashAttribute(
+                "success",
+                "Book deleted successfully!"
+        );
+
         return "redirect:/books/list";
     }
 
